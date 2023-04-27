@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: udaconnect-location
+  name: udaconnect-location
+spec:
+  ports:
+  - name: "5005"
+    port: 5005
+    targetPort: 5005
+    nodePort: 30002
+  selector:
+    service: udaconnect-location
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: udaconnect-location
+  name: udaconnect-location
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: udaconnect-location
+  template:
+    metadata:
+      labels:
+        service: udaconnect-location
+    spec:
+      containers:
+      - image: haithanh86/udaconnect-location-grpc:latest
+        name: udaconnect-location-grpc
+        imagePullPolicy: Always
+        env:
+        - name: KAFKA_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-env
+              key: KAFKA_SERVER
+        - name: TOPIC_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-env
+              key: TOPIC_NAME
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: udaconnect-location-consumer
+  name: udaconnect-location-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: udaconnect-location-consumer
+  template:
+    metadata:
+      labels:
+        service: udaconnect-location-consumer
+    spec:
+      containers:
+      - image: haithanh86/udaconnect-location-consumer:latest
+        name: udaconnect-location-consumer
+        imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_NAME
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_PORT
+        - name: KAFKA_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-env
+              key: KAFKA_SERVER
+        - name: TOPIC_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-env
+              key: TOPIC_NAME
+      restartPolicy: Always
+

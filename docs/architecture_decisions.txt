@@ -1,0 +1,3 @@
+* Udaconnect Web application use only REST api for persons and persion's connection. Therefore, the LocationService dont need to use REST API. 
+* The LocationService should by use gRPC for IoT, mobile devices push location data with high throughput.
+* The LocationService should use Kafka to push location event, mobile and IoT devices can subcribe Kafka topic to get new location added without access database

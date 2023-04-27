@@ -1,0 +1,44 @@
+{
+	"info": {
+		"_postman_id": "8e45babb-99ed-4611-ac09-9147c1d38ec4",
+		"name": "UdaConnect API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "locations",
+					"item": [
+						{
+							"name": "get locations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/",
+			"type": "string"
+		}
+	]
+}
